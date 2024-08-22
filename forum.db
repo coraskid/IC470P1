@@ -1,0 +1,12 @@
+<?php
+// Create a new SQLite database if it doesn't exist
+$db = new PDO('sqlite:forum.db');
+
+// Create a table for posts
+$db->exec("CREATE TABLE IF NOT EXISTS posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    url TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)");
+?>
