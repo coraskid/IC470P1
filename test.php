@@ -1,8 +1,4 @@
 
-
-<?php
-    echo "this is a test";
-    ?>
 <?php
 // Connect to the SQLite database
 try {
@@ -45,8 +41,10 @@ $posts = $db->query("SELECT * FROM posts ORDER BY created_at DESC")->fetchAll(PD
     <title>PHP Forum</title>
 </head>
 <body>
-    <h1>Simple Forum</h1>
-
+    <h1>Forum Submission</h1>
+    <h2> 
+        <a href="index.php">return to main page!</a>
+    </h2>
     <!-- Form to submit a new post -->
     <form action="" method="post">
         <input type="text" name="title" placeholder="Title" required>
@@ -55,31 +53,5 @@ $posts = $db->query("SELECT * FROM posts ORDER BY created_at DESC")->fetchAll(PD
     </form>
 
     <hr>
-
-    <!-- List all posts -->
-    <?php if ($posts): ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Created At</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($posts as $post): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($post['id']); ?></td>
-                        <td><?php echo htmlspecialchars($post['title']); ?></td>
-                        <td><?php echo htmlspecialchars($post['description']); ?></td>
-                        <td><?php echo htmlspecialchars($post['created_at']); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <p>No posts found.</p>
-    <?php endif; ?>
 </body>
 </html>
