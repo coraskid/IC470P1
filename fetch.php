@@ -98,13 +98,18 @@ function vote($entry) {
                 <?php 
                 $db = new PDO('sqlite:forum.db');
                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $sql = "SELECT id, description FROM comments WHERE post_id = $post['id']";
+                $sql = "SELECT id, description FROM comments WHERE post_id = ".$post['id'];
                 $statement2 = $db->query($sql);
                 $comments = $statement2->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($comments as $comment): ?>
+                ?>
+                <?php foreach ($comments as $comment): ?>
                     <tr id="comments" class="comment">
-                    <td><?php echo htmlspecialchars($post['id']); ?></td>
-                    <td><?php echo htmlspecialchars($post['description']); ?></td>
+                        <td><?php echo htmlspecialchars($post['id']); ?></td>
+                        <td><?php echo htmlspecialchars($post['description']); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                <tr>
+                    <td colspan="7">No posts found.</td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
