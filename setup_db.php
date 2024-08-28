@@ -16,11 +16,11 @@ $sql = "CREATE TABLE IF NOT EXISTS posts (
 $sql = "CREATE TABLE IF NOT EXISTS comments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     post_id INTEGER NOT NULL,
-    content TEXT NOT NULL,
+    description TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     upvotes INTEGER DEFAULT 0,
     downvotes INTEGER DEFAULT 0,
-    FOREIGN KEY (topic_id) REFERENCES posts(id)
+    FOREIGN KEY (post_id) REFERENCES posts(id)
 )";
 
 try {

@@ -8,8 +8,17 @@ $sql = "SELECT * FROM posts";
 $statement = $db->query($sql);
 $posts = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-function vote() {
-    echo "test";
+function vote($entry) {
+    $id = $entry['id'];
+    $sql = "UPDATE posts SET $upvotes = $upvotes + 1 WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    // if ($db->query($sql) === TRUE) {
+    //     echo "Record updated successfully";
+    // } else {
+    //     echo "Error updating record: " . $db->error;
+    // }
 }
 
 ?>
@@ -75,7 +84,7 @@ function vote() {
     <tbody>
         <?php if ($posts): ?>
             <?php foreach ($posts as $post): ?>
-                <tr>
+                <tr class="clickable" onclick="toggleDetails('comments')">
                     <td><?php echo htmlspecialchars($post['id']); ?></td>
                     <td><?php echo htmlspecialchars($post['title']); ?></td>
                     <td><?php echo htmlspecialchars($post['description']); ?></td>
@@ -83,8 +92,19 @@ function vote() {
                     <td><?php echo htmlspecialchars($post['upvotes']); ?>
                         <a href="vote.php" role="button">Like</button></td>
                     <td><?php echo htmlspecialchars($post['downvotes']); ?>
-                        <button onclick="vote()" type="button">Dislike</button></td>
-                    <td><button type="button">Comments</button></td>
+                        <button onclick="vote($post)" type="button">Dislike</button></td>
+                    <td><?php echo "<a href='comment.php?id=" . $post['id']."'>View Comments</a>"?></td>
+                </tr>
+                <?php 
+                $db = new PDO('sqlite:forum.db');
+                $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $sql = "SELECT id, description FROM comments WHERE post_id = $post['id']";
+                $statement2 = $db->query($sql);
+                $comments = $statement2->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($comments as $comment): ?>
+                    <tr id="comments" class="comment">
+                    <td><?php echo htmlspecialchars($post['id']); ?></td>
+                    <td><?php echo htmlspecialchars($post['description']); ?></td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
