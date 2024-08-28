@@ -49,6 +49,7 @@ $posts = $db->query("SELECT * FROM posts ORDER BY created_at DESC")->fetchAll(PD
     <h1>Forum Submission</h1>
     <h2> 
         <a href="index.php">return to main page!</a>
+        <a href="fetch.php">View Sumbissions!</a>
     </h2>
     <!-- Form to submit a new post -->
     <form action="" method="post">

@@ -7,6 +7,11 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $sql = "SELECT * FROM posts";
 $statement = $db->query($sql);
 $posts = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+function vote() {
+    echo "test";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +55,10 @@ $posts = $statement->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <h1>Posts</h1>
+<h2> 
+    <a href="test.php">Submit a post!</a>
+    <a href="index.php">Main page</a>
+</h2>
 
 <table>
     <thead>
@@ -71,14 +80,11 @@ $posts = $statement->fetchAll(PDO::FETCH_ASSOC);
                     <td><?php echo htmlspecialchars($post['title']); ?></td>
                     <td><?php echo htmlspecialchars($post['description']); ?></td>
                     <td><?php echo htmlspecialchars($post['created_at']); ?></td>
-                    <td>7 <button type="button">Like</button></td>
-                    <td><button type="button">Dislike</button></td>
-                    <td>
-                        <button type="button" class="collapsible">Comments</button>
-                        <div class="content">
-                            <p>No comments yet.</p>
-                        </div>
-                    </td>
+                    <td><?php echo htmlspecialchars($post['upvotes']); ?>
+                        <a href="vote.php" role="button">Like</button></td>
+                    <td><?php echo htmlspecialchars($post['downvotes']); ?>
+                        <button onclick="vote()" type="button">Dislike</button></td>
+                    <td><button type="button">Comments</button></td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
