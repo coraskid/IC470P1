@@ -90,10 +90,10 @@ function vote($entry) {
                     <td><?php echo htmlspecialchars($post['description']); ?></td>
                     <td><?php echo htmlspecialchars($post['created_at']); ?></td>
                     <td><?php echo htmlspecialchars($post['upvotes']); ?>
-                        <a href="vote.php" role="button">Like</button></td>
+                        <a href="index.php"><button>Like</button></a></td>
                     <td><?php echo htmlspecialchars($post['downvotes']); ?>
                         <button onclick="vote($post)" type="button">Dislike</button></td>
-                    <td><?php echo "<a href='comment.php?id=" . $post['id']."'>View Comments</a>"?></td>
+                    <td><?php echo "<a href='comment.php?id=" . $post['id']."'>Add Comments</a>"?></td>
                 </tr>
                 <?php 
                 $db = new PDO('sqlite:forum.db');
@@ -104,12 +104,12 @@ function vote($entry) {
                 ?>
                 <?php foreach ($comments as $comment): ?>
                     <tr id="comments" class="comment">
-                        <td><?php echo htmlspecialchars($post['id']); ?></td>
-                        <td><?php echo htmlspecialchars($post['description']); ?></td>
+                        <td><?php echo htmlspecialchars($comment['id']); ?></td>
+                        <td><?php echo htmlspecialchars($comment['description']); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 <tr>
-                    <td colspan="7">No posts found.</td>
+                    <td colspan="7">No comments Found.</td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
