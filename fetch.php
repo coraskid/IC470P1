@@ -87,19 +87,18 @@ function vote($entry) {
         </tr>
     </thead>
     <tbody>
-    <?php if ($posts): ?>
-            <?php $count = 0; foreach ($posts as $post): ?>
-                <tr class="clickable" onclick="toggleDetails('comments')">
+        <?php if ($posts): ?>
+            <?php $x = 0; foreach ($posts as $post): ?>
+                <tr class="clickable" onclick="toggleDetails(<?php $x ?>)">
                     <td><?php echo htmlspecialchars($post['id']); ?></td>
                     <td><?php echo htmlspecialchars($post['title']); ?></td>
                     <td><?php echo htmlspecialchars($post['description']); ?></td>
                     <td><?php echo htmlspecialchars($post['created_at']); ?></td>
                     <td><?php echo htmlspecialchars($post['upvotes']); ?>
-                        <?php echo "<a href='vote.php?id=".$post['id']."'><button>Like</button></a>"?>
-                    </td>
+                        <?php echo "<a href='vote.php?type=post&id=".$post['id']."'><button>Like</button></a>";?></td>
                     <td><?php echo htmlspecialchars($post['downvotes']); ?>
-                        <button onclick="vote($post)" type="button">Dislike</button></td>
-                    <td><?php echo "<a href='comment.php?id=" . $post['id']."'>Add Comments</a>"?></td>
+                        <?php echo "<a href='vote_dislike.php?type=post&id=".$post['id']."'><button>Dislike</button></a>";?></td>
+                    <td><?php echo "<a href='comment.php?id=" . $post['id']."'>Add Comments</a>"; $x++;?></td>
                 </tr>
                 <?php 
                 $db = new PDO('sqlite:forum.db');
@@ -109,10 +108,37 @@ function vote($entry) {
                 $comments = $statement2->fetchAll(PDO::FETCH_ASSOC);
                 ?>
                 <?php $x = 0; foreach ($comments as $comment): ?>
-                    <tr id= <?php $x ?> class="comment">
+                    <tr id= <?php $y ?> class="comment">
+                        <td></td>
                         <td><?php echo htmlspecialchars($comment['id']); ?></td>
-                        <td><?php echo htmlspecialchars($comment['description']); $x++;?></td>
+                        <td><?php echo htmlspecialchars($comment['description']); $y++;?></td>
+                        <td></td>
+                        <td><?php echo htmlspecialchars($comment['upvotes']); ?>
+                            <?php echo "<a href='vote.php?type=comment&id=".$comment['id']."'><button>Like</button></a>";?></td>
+                        <td><?php echo htmlspecialchars($comment['downvotes']); ?>
+                            <?php echo "<a href='vote_dislike.php?type=comment&id=".$comment['id']."'><button>Dislike</button></a>";?></td>
+                        <td><?php echo "<a href='reply.php?id=" . $comment['id']."'>Reply</a>"; $y++;?></td>
                     </tr>
+                    <?php 
+                    $db = new PDO('sqlite:forum.db');
+                    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $sql = "SELECT id, description FROM replies WHERE comment_id = ".$comment['id'];
+                    $statement3 = $db->query($sql);
+                    $replies = $statement3->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+                    <?php $z = 0; foreach ($replies as $reply): ?>
+                        <tr id= <?php $z ?> class="reply">
+                            <td></td>
+                            <td></td>
+                            <td><?php echo htmlspecialchars($reply['description']); $z++;?></td>
+                            <td></td>
+                            <td><?php echo htmlspecialchars($reply['upvotes']); ?>
+                                <?php echo "<a href='vote.php?type=reply&id=".$reply['id']."'><button>Like</button></a>";?></td>
+                            <td><?php echo htmlspecialchars($reply['downvotes']); ?>
+                                <?php echo "<a href='vote_dislike.php?type=reply&id=".$reply['id']."'><button>Dislike</button></a>";?></td>
+                            <td></td>
+                        </tr>
+                    <?php endforeach;?>
                 <?php endforeach; ?>
             <?php endforeach; ?>
         <?php else: ?>
