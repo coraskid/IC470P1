@@ -82,8 +82,8 @@ function vote($entry) {
         </tr>
     </thead>
     <tbody>
-        <?php if ($posts): ?>
-            <?php foreach ($posts as $post): ?>
+    <?php if ($posts): ?>
+            <?php $count = 0; foreach ($posts as $post): ?>
                 <tr class="clickable" onclick="toggleDetails('comments')">
                     <td><?php echo htmlspecialchars($post['id']); ?></td>
                     <td><?php echo htmlspecialchars($post['title']); ?></td>
@@ -102,15 +102,12 @@ function vote($entry) {
                 $statement2 = $db->query($sql);
                 $comments = $statement2->fetchAll(PDO::FETCH_ASSOC);
                 ?>
-                <?php foreach ($comments as $comment): ?>
-                    <tr id="comments" class="comment">
+                <?php $x = 0; foreach ($comments as $comment): ?>
+                    <tr id= <?php $x ?> class="comment">
                         <td><?php echo htmlspecialchars($comment['id']); ?></td>
-                        <td><?php echo htmlspecialchars($comment['description']); ?></td>
+                        <td><?php echo htmlspecialchars($comment['description']); $x++;?></td>
                     </tr>
                 <?php endforeach; ?>
-                <tr>
-                    <td colspan="7">No comments Found.</td>
-                </tr>
             <?php endforeach; ?>
         <?php else: ?>
             <tr>
@@ -119,7 +116,7 @@ function vote($entry) {
         <?php endif; ?>
     </tbody>
 </table>
-
+<script src="accordian.js"></script> 
 </body>
 </html>
     
