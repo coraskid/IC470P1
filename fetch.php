@@ -95,7 +95,8 @@ function vote($entry) {
                     <td><?php echo htmlspecialchars($post['description']); ?></td>
                     <td><?php echo htmlspecialchars($post['created_at']); ?></td>
                     <td><?php echo htmlspecialchars($post['upvotes']); ?>
-                        <a href="index.php"><button>Like</button></a></td>
+                        <?php echo "<a href='vote.php?id=".$post['id']."'><button>Like</button></a>"?>
+                    </td>
                     <td><?php echo htmlspecialchars($post['downvotes']); ?>
                         <button onclick="vote($post)" type="button">Dislike</button></td>
                     <td><?php echo "<a href='comment.php?id=" . $post['id']."'>Add Comments</a>"?></td>

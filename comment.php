@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <textarea name="description" placeholder="Description" required></textarea>
         <button type="submit">Submit</button>
     </form>
-
+    
     <hr>
 </body>
 </html>
