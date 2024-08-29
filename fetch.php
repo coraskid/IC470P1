@@ -1,3 +1,8 @@
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="accstyles.css"> 
+</head>
 <?php
 // Connect to the SQLite database
 $db = new PDO('sqlite:forum.db');

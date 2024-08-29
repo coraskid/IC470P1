@@ -1,0 +1,19 @@
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+} 
+ 
+th, td { 
+    border: 1px solid #ddd; 
+    padding: 8px; 
+    text-align: left; 
+} 
+ 
+.clickable { 
+    cursor: pointer; 
+    background-color: #f1f1f1; 
+} 
+ 
+.comment { 
+    display: none; /* Hide the details by default */ 
+} 
