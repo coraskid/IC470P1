@@ -10,6 +10,7 @@ Resources/Licenses:
 Chat GPT:
 
 License:
+https://openai.com/policies/terms-of-use/
 
 
 Mostly used for error handling and HTML formating
