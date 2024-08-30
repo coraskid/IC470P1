@@ -1,8 +1,3 @@
-<html lang="en"> 
-<head> 
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="accstyles.css"> 
-</head>
 <?php
 // Connect to the SQLite database
 $db = new PDO('sqlite:forum.db');
@@ -12,19 +7,6 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $sql = "SELECT * FROM posts";
 $statement = $db->query($sql);
 $posts = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-function vote($entry) {
-    $id = $entry['id'];
-    $sql = "UPDATE posts SET $upvotes = $upvotes + 1 WHERE id = :id";
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
-    // if ($db->query($sql) === TRUE) {
-    //     echo "Record updated successfully";
-    // } else {
-    //     echo "Error updating record: " . $db->error;
-    // }
-}
 
 ?>
 
@@ -88,8 +70,8 @@ function vote($entry) {
     </thead>
     <tbody>
         <?php if ($posts): ?>
-            <?php $x = 0; foreach ($posts as $post): ?>
-                <tr class="clickable" onclick="toggleDetails(<?php $x ?>)">
+            <?php foreach ($posts as $post): ?>
+                <tr class="clickable" onclick="toggleDetails(<?php echo $post['id']; ?>)">
                     <td><?php echo htmlspecialchars($post['id']); ?></td>
                     <td><?php echo htmlspecialchars($post['title']); ?></td>
                     <td><?php echo htmlspecialchars($post['description']); ?></td>
@@ -98,43 +80,43 @@ function vote($entry) {
                         <?php echo "<a href='vote.php?type=post&id=".$post['id']."'><button>Like</button></a>";?></td>
                     <td><?php echo htmlspecialchars($post['downvotes']); ?>
                         <?php echo "<a href='vote_dislike.php?type=post&id=".$post['id']."'><button>Dislike</button></a>";?></td>
-                    <td><?php echo "<a href='comment.php?id=" . $post['id']."'>Add Comments</a>"; $x++;?></td>
+                    <td><?php echo "<a href='comment.php?id=" . $post['id']."'>Add Comments</a>"; ?></td>
                 </tr>
-                <?php 
-                $db = new PDO('sqlite:forum.db');
-                $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $sql = "SELECT id, description FROM comments WHERE post_id = ".$post['id'];
-                $statement2 = $db->query($sql);
-                $comments = $statement2->fetchAll(PDO::FETCH_ASSOC);
+                <?php
+                $sql_comments = "SELECT id, description, upvotes, downvotes FROM comments WHERE post_id = :post_id";
+                $stmt_comments = $db->prepare($sql_comments);
+                $stmt_comments->bindParam(':post_id', $post['id'], PDO::PARAM_INT);
+                $stmt_comments->execute();
+                $comments = $stmt_comments->fetchAll(PDO::FETCH_ASSOC);
                 ?>
-                <?php $x = 0; foreach ($comments as $comment): ?>
-                    <tr id= <?php $y ?> class="comment">
+                <?php foreach ($comments as $comment): ?>
+                    <tr class="comment">
                         <td></td>
                         <td><?php echo htmlspecialchars($comment['id']); ?></td>
-                        <td><?php echo htmlspecialchars($comment['description']); $y++;?></td>
+                        <td><?php echo htmlspecialchars($comment['description']); ?></td>
                         <td></td>
-                        <td><?php echo htmlspecialchars($comment['upvotes']); ?>
+                        <td><?php echo isset($comment['upvotes']) ? htmlspecialchars($comment['upvotes']) : '0'; ?>
                             <?php echo "<a href='vote.php?type=comment&id=".$comment['id']."'><button>Like</button></a>";?></td>
-                        <td><?php echo htmlspecialchars($comment['downvotes']); ?>
+                        <td><?php echo isset($comment['downvotes']) ? htmlspecialchars($comment['downvotes']) : '0'; ?>
                             <?php echo "<a href='vote_dislike.php?type=comment&id=".$comment['id']."'><button>Dislike</button></a>";?></td>
-                        <td><?php echo "<a href='reply.php?id=" . $comment['id']."'>Reply</a>"; $y++;?></td>
+                        <td><?php echo "<a href='reply.php?id=" . $comment['id']."'>Reply</a>"; ?></td>
                     </tr>
-                    <?php 
-                    $db = new PDO('sqlite:forum.db');
-                    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $sql = "SELECT id, description FROM replies WHERE comment_id = ".$comment['id'];
-                    $statement3 = $db->query($sql);
-                    $replies = $statement3->fetchAll(PDO::FETCH_ASSOC);
+                    <?php
+                    $sql_replies = "SELECT id, description, upvotes, downvotes FROM replies WHERE comment_id = :comment_id";
+                    $stmt_replies = $db->prepare($sql_replies);
+                    $stmt_replies->bindParam(':comment_id', $comment['id'], PDO::PARAM_INT);
+                    $stmt_replies->execute();
+                    $replies = $stmt_replies->fetchAll(PDO::FETCH_ASSOC);
                     ?>
-                    <?php $z = 0; foreach ($replies as $reply): ?>
-                        <tr id= <?php $z ?> class="reply">
+                    <?php foreach ($replies as $reply): ?>
+                        <tr class="reply">
                             <td></td>
                             <td></td>
-                            <td><?php echo htmlspecialchars($reply['description']); $z++;?></td>
+                            <td><?php echo htmlspecialchars($reply['description']); ?></td>
                             <td></td>
-                            <td><?php echo htmlspecialchars($reply['upvotes']); ?>
+                            <td><?php echo isset($reply['upvotes']) ? htmlspecialchars($reply['upvotes']) : '0'; ?>
                                 <?php echo "<a href='vote.php?type=reply&id=".$reply['id']."'><button>Like</button></a>";?></td>
-                            <td><?php echo htmlspecialchars($reply['downvotes']); ?>
+                            <td><?php echo isset($reply['downvotes']) ? htmlspecialchars($reply['downvotes']) : '0'; ?>
                                 <?php echo "<a href='vote_dislike.php?type=reply&id=".$reply['id']."'><button>Dislike</button></a>";?></td>
                             <td></td>
                         </tr>
@@ -151,4 +133,3 @@ function vote($entry) {
 <script src="accordian.js"></script> 
 </body>
 </html>
-    
